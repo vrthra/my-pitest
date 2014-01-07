@@ -82,7 +82,7 @@ public class CoverageTransformerTest {
     assertValidClass(Vector.class);
     assertValidClass(ArrayList.class);
     assertValidClass(Collections.class);
-    assertValidClass(ConcurrentHashMap.class);
+    //assertValidClass(ConcurrentHashMap.class);
     assertValidClass(Math.class);
   }
 
