@@ -240,8 +240,12 @@ public class RemoveConditionalMutatorTest extends MutatorTestBase {
   }
 
   @Test
-  public void shouldNotReplaceIFLE() throws Exception {
-    assertNoMutants(HasIFLE.class);
+  public void shouldReplaceIFLE() throws Exception {
+    final Mutant mutant = getFirstMutant(HasIFLE.class);
+    final String expected = "was > zero";
+    assertMutantCallableReturns(new HasIFLE(1), mutant, expected);
+    assertMutantCallableReturns(new HasIFLE(0), mutant, expected);
+    
   }
 
   static class HasIFGE implements Callable<String> {
@@ -261,8 +265,11 @@ public class RemoveConditionalMutatorTest extends MutatorTestBase {
   }
 
   @Test
-  public void shouldNotReplaceIFGE() throws Exception {
-    assertNoMutants(HasIFGE.class);
+  public void shouldReplaceIFGE() throws Exception {
+	    final Mutant mutant = getFirstMutant(HasIFGE.class);
+	    final String expected = "was < zero";
+	    assertMutantCallableReturns(new HasIFGE(1), mutant, expected);
+	    assertMutantCallableReturns(new HasIFGE(0), mutant, expected);
   }
 
   static class HasIFGT implements Callable<String> {
@@ -282,8 +289,11 @@ public class RemoveConditionalMutatorTest extends MutatorTestBase {
   }
 
   @Test
-  public void shouldNotReplaceIFGT() throws Exception {
-    assertNoMutants(HasIFGT.class);
+  public void shouldReplaceIFGT() throws Exception {
+	    final Mutant mutant = getFirstMutant(HasIFGT.class);
+	    final String expected = "was <= zero";
+	    assertMutantCallableReturns(new HasIFGT(1), mutant, expected);
+	    assertMutantCallableReturns(new HasIFGT(0), mutant, expected);
   }
 
   static class HasIFLT implements Callable<String> {
@@ -304,7 +314,10 @@ public class RemoveConditionalMutatorTest extends MutatorTestBase {
 
   @Test
   public void shouldNotReplaceIFLT() throws Exception {
-    assertNoMutants(HasIFLT.class);
+	    final Mutant mutant = getFirstMutant(HasIFLT.class);
+	    final String expected = "was >= zero";
+	    assertMutantCallableReturns(new HasIFLT(1), mutant, expected);
+	    assertMutantCallableReturns(new HasIFLT(0), mutant, expected);
   }
 
   static class HasIF_ICMPLE implements Callable<String> {
@@ -325,8 +338,11 @@ public class RemoveConditionalMutatorTest extends MutatorTestBase {
   }
 
   @Test
-  public void shouldNotReplaceIF_ICMPLE() throws Exception {
-    assertNoMutants(HasIF_ICMPLE.class);
+  public void shouldReplaceIF_ICMPLE() throws Exception {
+	    final Mutant mutant = getFirstMutant(HasIF_ICMPLE.class);
+	    final String expected = "was > zero";
+	    assertMutantCallableReturns(new HasIF_ICMPLE(1), mutant, expected);
+	    assertMutantCallableReturns(new HasIF_ICMPLE(0), mutant, expected);
   }
 
   static class HasIF_ICMPGE implements Callable<String> {
@@ -348,7 +364,10 @@ public class RemoveConditionalMutatorTest extends MutatorTestBase {
 
   @Test
   public void shouldNotReplaceIF_ICMPGE() throws Exception {
-    assertNoMutants(HasIF_ICMPGE.class);
+	    final Mutant mutant = getFirstMutant(HasIF_ICMPGE.class);
+	    final String expected = "was < zero";
+	    assertMutantCallableReturns(new HasIF_ICMPGE(1), mutant, expected);
+	    assertMutantCallableReturns(new HasIF_ICMPGE(0), mutant, expected);
   }
 
   static class HasIF_ICMPGT implements Callable<String> {
@@ -370,7 +389,10 @@ public class RemoveConditionalMutatorTest extends MutatorTestBase {
 
   @Test
   public void shouldNotReplaceIF_ICMPGT() throws Exception {
-    assertNoMutants(HasIF_ICMPGT.class);
+	    final Mutant mutant = getFirstMutant(HasIF_ICMPGT.class);
+	    final String expected = "was <= zero";
+	    assertMutantCallableReturns(new HasIF_ICMPGT(1), mutant, expected);
+	    assertMutantCallableReturns(new HasIF_ICMPGT(0), mutant, expected);
   }
 
   static class HasIF_ICMPLT implements Callable<String> {
@@ -392,13 +414,9 @@ public class RemoveConditionalMutatorTest extends MutatorTestBase {
 
   @Test
   public void shouldNotReplaceIF_ICMPLT() throws Exception {
-    assertNoMutants(HasIF_ICMPLT.class);
+	    final Mutant mutant = getFirstMutant(HasIF_ICMPLT.class);
+	    final String expected = "was >= zero";
+	    assertMutantCallableReturns(new HasIF_ICMPLT(1), mutant, expected);
+	    assertMutantCallableReturns(new HasIF_ICMPLT(0), mutant, expected);
   }
-
-  private void assertNoMutants(final Class<?> mutee) {
-    final Collection<MutationDetails> actual = findMutationsFor(mutee);
-    assertTrue(actual.isEmpty());
-
-  }
-
 }

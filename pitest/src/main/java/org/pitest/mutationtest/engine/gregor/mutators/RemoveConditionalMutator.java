@@ -1,5 +1,10 @@
 package org.pitest.mutationtest.engine.gregor.mutators;
 
+/*
+ * The remove conditionals mutator will remove all conditionals statements
+ *  such that the guarded statements always execute
+ */
+
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
@@ -64,6 +69,10 @@ class RemoveConditionalMethodVisitor extends MethodVisitor {
     case Opcodes.IF_ICMPEQ:
     case Opcodes.IF_ACMPEQ:
     case Opcodes.IF_ACMPNE:
+    case Opcodes.IF_ICMPGE:
+    case Opcodes.IF_ICMPGT:
+    case Opcodes.IF_ICMPLE:
+    case Opcodes.IF_ICMPLT:
       super.visitInsn(Opcodes.POP2);
       break;
     default:
@@ -76,12 +85,20 @@ class RemoveConditionalMethodVisitor extends MethodVisitor {
     switch (opcode) {
     case Opcodes.IFEQ:
     case Opcodes.IFNE:
+    case Opcodes.IFLE:
+    case Opcodes.IFGE:
+    case Opcodes.IFGT:
+    case Opcodes.IFLT:   	
     case Opcodes.IFNONNULL:
     case Opcodes.IFNULL:
     case Opcodes.IF_ICMPNE:
     case Opcodes.IF_ICMPEQ:
     case Opcodes.IF_ACMPEQ:
     case Opcodes.IF_ACMPNE:
+    case Opcodes.IF_ICMPGE:
+    case Opcodes.IF_ICMPGT:
+    case Opcodes.IF_ICMPLE:
+    case Opcodes.IF_ICMPLT:
       return true;
     default:
       return false;
