@@ -14,6 +14,18 @@
  */
 package org.pitest.mutationtest.engine.gregor.mutators;
 
+/*
+ * The negate conditionals mutator will mutate all conditionals found
+ *  according to the replacement table below.
+ *  Original conditional 	Mutated conditional
+ *   ==    !=
+ *   !=    ==
+ *   <=    >
+ *   >=    <
+ *   <     >=
+ *   >     <=
+ */
+
 import java.util.HashMap;
 import java.util.Map;
 

@@ -14,6 +14,16 @@
  */
 package org.pitest.mutationtest.engine.gregor.mutators;
 
+/*
+ * The conditionals boundary mutator replaces the relational operators 
+ * <, <=, >, >= with their boundary counterpart as per the table below.
+ * Original conditional     Mutated conditional
+ *   <      <=
+ *   <=     <
+ *   >      >=
+ *   >=     >
+ */
+
 import java.util.HashMap;
 import java.util.Map;
 
