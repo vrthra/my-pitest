@@ -5,7 +5,7 @@
     <organization><name>org.pitest</name></organization>
     <artifactId>pitest-parent</artifactId>
     <packaging>pom</packaging>
-    <version>0.33-SNAPSHOT</version>
+    <version>0.34-CURRENT</version>
     <name>pitest-parent</name>
     <url>http://pitest.org</url>
     <description>Mutation testing system for java - parent project</description>
@@ -143,7 +143,7 @@
         </pluginManagement>
     </build>
 
-    <profiles>
+    <!--profiles>
         <profile>
             <id>release-sign-artifacts</id>
             <activation>
@@ -170,7 +170,7 @@
                 </plugins>
             </build>
         </profile>
-    </profiles>
+    </profiles-->
 
     <!-- versions of libraries which are used in different projects or which are used for few artifacts -->
     <properties>
