@@ -16,7 +16,9 @@ package org.pitest.mutationtest.filter;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.pitest.mutationtest.engine.MutationDetails;
 
@@ -31,31 +33,32 @@ public class LimitNumberOfMutationPerClassFilter implements MutationFilter {
 
   public Collection<MutationDetails> filter(
       final Collection<MutationDetails> mutations) {
-    if (mutations.size() <= this.maxMutationsPerClass) {
-      return mutations;
-    } else {
-      return createEvenlyDistributedSampling(mutations);
-    }
+	  Map<Integer, ArrayList<MutationDetails>> lines = new HashMap<Integer, ArrayList<MutationDetails>>();	  
+	  for(MutationDetails m : mutations) {
+		  int ln = m.getLineNumber();
+		  if (lines.containsKey(ln)) {
+			  lines.get(ln).add(m);
+		  } else {
+			  ArrayList<MutationDetails> md = new ArrayList<MutationDetails>();
+			  md.add(m);
+			  lines.put(ln, md);
+		  }
+	  }
+	  Collection<MutationDetails> mymutations = new ArrayList<MutationDetails>();
+	  for(ArrayList<MutationDetails> m : lines.values()) {
+		  mymutations.addAll(choose(m));
+	  }
+      return mymutations;
   }
 
-  private Collection<MutationDetails> createEvenlyDistributedSampling(
-      final Collection<MutationDetails> mutations) {
-    final Collection<MutationDetails> filtered = new ArrayList<MutationDetails>(
-        this.maxMutationsPerClass);
-    final int step = (mutations.size() / this.maxMutationsPerClass);
-    final Iterator<MutationDetails> it = mutations.iterator();
-    while (it.hasNext()) {
-      int i = 0;
-      MutationDetails value = null;
-      while (it.hasNext() && (i != step)) {
-        value = it.next();
-        i++;
-      }
-      if (filtered.size() != this.maxMutationsPerClass) {
-        filtered.add(value);
-      }
-    }
-
-    return filtered;
+  private Collection<MutationDetails> choose(
+      final ArrayList<MutationDetails> mutations) {
+	  int max = Math.min(mutations.size(), maxMutationsPerClass);
+	  Collections.shuffle(mutations);
+	  Collection<MutationDetails> mymutations = new ArrayList<MutationDetails>();
+	  for (int i=0; i<max; i++) {
+      mymutations.add(mutations.get(i));
+	  }
+	  return mymutations;
   }
 }
