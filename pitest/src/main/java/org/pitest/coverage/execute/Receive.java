@@ -1,9 +1,10 @@
 package org.pitest.coverage.execute;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
 
 import org.pitest.coverage.ClassStatistics;
 import org.pitest.coverage.CoverageResult;
@@ -44,7 +45,6 @@ final class Receive implements ReceiveStrategy {
     final long numberOfResults = is.readLong();
 
     final Map<Integer, ClassStatistics> hits = new HashMap<Integer, ClassStatistics>();
-
     for (int i = 0; i != numberOfResults; i++) {
       readLineHit(is, hits);
     }
@@ -67,9 +67,12 @@ final class Receive implements ReceiveStrategy {
       final Description d, final Map<Integer, ClassStatistics> hits) {
     final boolean isGreen = is.readBoolean();
     final int executionTime = is.readInt();
-    final CoverageResult cr = new CoverageResult(d, executionTime, isGreen,
-        hits.values());
-    return cr;
+    if (isGreen) {
+        return new CoverageResult(d, executionTime, isGreen, hits.values());
+    } else {
+    	// ensure that the test does not have coverage, and hence is not selected for execution.
+        return new CoverageResult(d, executionTime, isGreen,new ArrayList<ClassStatistics>());
+    }
   }
 
   private ClassStatistics getStatisticsForClass(
