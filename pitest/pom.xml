@@ -292,7 +292,12 @@
 			<artifactId>JUnitParams</artifactId>
 			<version>0.9.0</version>
 			<scope>test</scope>
-		</dependency>
+    </dependency>
+    <dependency>
+      <groupId>org.jruby</groupId>
+      <artifactId>jruby-core</artifactId>
+      <version>1.7.10</version>
+    </dependency>
 	</dependencies>
 
 </project>

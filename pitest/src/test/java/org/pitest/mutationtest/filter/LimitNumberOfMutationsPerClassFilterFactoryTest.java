@@ -6,11 +6,11 @@ import org.junit.Test;
 
 public class LimitNumberOfMutationsPerClassFilterFactoryTest {
   
-  private LimitNumberOfMutationsPerClassFilterFactory testee = new LimitNumberOfMutationsPerClassFilterFactory();
+  private LimitNumberOfMutationsFilterFactory testee = new LimitNumberOfMutationsFilterFactory();
 
   @Test
   public void shouldFilterWhenNumberOfMutationsPerClassGreaterThanThanZero() {
-    assertTrue(testee.createFilter(null, 1) instanceof LimitNumberOfMutationPerClassFilter);
+    assertTrue(testee.createFilter(null, 1) instanceof LimitNumberOfMutationsFilter);
   }
   
   @Test

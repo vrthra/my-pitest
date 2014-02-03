@@ -29,11 +29,11 @@ import org.pitest.mutationtest.engine.MutationIdentifier;
 
 public class LimitNumberOfMutationPerClassFilterTest {
 
-  private LimitNumberOfMutationPerClassFilter testee;
+  private LimitNumberOfMutationsFilter testee;
 
   @Before
   public void setUp() {
-    this.testee = new LimitNumberOfMutationPerClassFilter(3);
+    this.testee = new LimitNumberOfMutationsFilter(3);
   }
 
   @Test
