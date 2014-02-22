@@ -54,6 +54,7 @@ class DeleteConditionalMethodVisitor extends MethodVisitor {
 
       if (this.context.shouldMutate(newId)) {
         emptyStack(opcode);
+        super.visitJumpInsn(Opcodes.GOTO, label);
       } else {
         this.mv.visitJumpInsn(opcode, label);
       }
@@ -74,11 +75,9 @@ class DeleteConditionalMethodVisitor extends MethodVisitor {
     case Opcodes.IF_ICMPLE:
     case Opcodes.IF_ICMPLT:
       super.visitInsn(Opcodes.POP2);
-      super.visitInsn(Opcodes.GOTO);
       break;
     default:
       super.visitInsn(Opcodes.POP);
-      super.visitInsn(Opcodes.GOTO);
     }
 
   }

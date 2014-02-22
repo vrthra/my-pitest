@@ -16,6 +16,8 @@ import org.pitest.mutationtest.engine.gregor.MethodMutatorFactory;
  */
 public class SwitchMutator implements MethodMutatorFactory {
 
+  //EXPERIMENTAL_SWITCH_MUTATOR;
+
   public MethodVisitor create(final Context context,
       final MethodInfo methodInfo, final MethodVisitor methodVisitor) {
     return new SwitchMethodVisitor(context, methodVisitor);
@@ -24,8 +26,12 @@ public class SwitchMutator implements MethodMutatorFactory {
   public String getGloballyUniqueId() {
     return this.getClass().getName();
   }
-
   public String getName() {
+    return toString();
+  }
+
+  @Override
+  public String toString() {
     return "EXPERIMENTAL_SWITCH_MUTATOR";
   }
 
