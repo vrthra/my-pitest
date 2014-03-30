@@ -121,7 +121,9 @@ public class CoverageSlave {
       throws IOException {
     final List<ClassName> classes = receiveTestClassesFromParent(dis);
     Collections.sort(classes); // ensure classes loaded in a consistent order
-
+    for (ClassName c : classes) {
+    	LOG.info("TestClass: " + c.toString());
+    }
     final List<TestUnit> tus = discoverTests(paramsFromParent, classes);
 
     final DependencyFilter filter = new DependencyFilter(

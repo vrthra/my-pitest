@@ -23,6 +23,7 @@ public class CoverageResult implements Serializable {
     this.executionTime = executionTime;
     this.coverage = coverage;
     this.greenSuite = greenSuite;
+    System.out.println(">> Coverage: " + this.toString());
   }
 
   public Description getTestUnitDescription() {

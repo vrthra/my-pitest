@@ -1,4 +1,5 @@
 package org.pitest.mutationtest.execute;
+// Joins the MutationCommunicationThread and MutationTestSlave process together.
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

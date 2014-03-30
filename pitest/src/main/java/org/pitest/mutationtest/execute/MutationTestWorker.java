@@ -83,7 +83,7 @@ public class MutationTestWorker {
     // mess with the internals of Javassist so our mutated class
     // bytes are returned
     JavassistInterceptor.setMutant(mutatedClass);
-
+    
     LOG.fine("mutating method " + mutatedClass.getDetails().getMethod());
 
     final List<TestUnit> relevantTests = testSource
@@ -102,6 +102,9 @@ public class MutationTestWorker {
   private MutationStatusTestPair handleMutation(
       final MutationDetails mutationId, final Mutant mutatedClass,
       final List<TestUnit> relevantTests) {
+    for(TestUnit t : relevantTests) {
+      LOG.fine("Using test: " + t);
+    }
     MutationStatusTestPair mutationDetected;
     if ((relevantTests == null) || relevantTests.isEmpty()) {
       LOG.info("No test coverage for mutation  " + mutationId + " in "

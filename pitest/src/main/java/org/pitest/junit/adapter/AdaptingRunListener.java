@@ -5,12 +5,18 @@ import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.StoppedByUserException;
 import org.pitest.testapi.ResultCollector;
+import org.pitest.util.Log;
+import java.util.logging.Logger;
+
+
 
 class AdaptingRunListener extends RunListener {
 
   private final org.pitest.testapi.Description description;
   private final ResultCollector                rc;
   private boolean                              failed = false;
+  private static final Logger                  LOG = Log.getLogger();
+
 
   public AdaptingRunListener(final org.pitest.testapi.Description description,
       final ResultCollector rc) {
@@ -20,12 +26,15 @@ class AdaptingRunListener extends RunListener {
 
   @Override
   public void testFailure(final Failure failure) throws Exception {
-    this.rc.notifyEnd(this.description, failure.getException());
-    this.failed = true;
+    //this.rc.notifyEnd(this.description, failure.getException());
+    LOG.fine("CAUGHT: " + this.description);
+    // RAHUL : switch this to make it continue.
+    //this.failed = true;
   }
 
   @Override
   public void testAssumptionFailure(final Failure failure) {
+    LOG.fine("ASSUMPTION: " + this.description);
     // do nothing so treated as success
     // see http://junit.sourceforge.net/doc/ReleaseNotes4.4.html#assumptions
   }
@@ -33,6 +42,7 @@ class AdaptingRunListener extends RunListener {
   @Override
   public void testIgnored(final Description description) throws Exception {
     this.rc.notifySkipped(this.description);
+    LOG.fine("SKIP: " + this.description);
   }
 
   @Override
@@ -46,6 +56,7 @@ class AdaptingRunListener extends RunListener {
       throw new StoppedByUserException();
     }
     this.rc.notifyStart(this.description);
+    LOG.fine("START: " + this.description);
   }
 
   @Override
@@ -53,7 +64,7 @@ class AdaptingRunListener extends RunListener {
     if (!this.failed) {
       this.rc.notifyEnd(this.description);
     }
-
+    LOG.fine("FINISH: " + this.description);
   }
 
 }

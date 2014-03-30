@@ -49,7 +49,7 @@ public class WorkerFactory {
     final ProcessArgs args = ProcessArgs.withClassPath(this.classPath)
         .andLaunchOptions(this.config.getLaunchOptions())
         .andBaseDir(this.baseDir).andStdout(captureStdOutIfVerbose())
-        .andStderr(printWith("stderr "));
+        .andStderr(printWith(""));
 
     final SocketFinder sf = new SocketFinder();
     final MutationTestProcess worker = new MutationTestProcess(
@@ -59,7 +59,7 @@ public class WorkerFactory {
 
   private SideEffect1<String> captureStdOutIfVerbose() {
     if (this.verbose) {
-      return Prelude.printWith("stdout ");
+      return Prelude.printWith("");
     } else {
       return Prelude.noSideEffect(String.class);
     }
