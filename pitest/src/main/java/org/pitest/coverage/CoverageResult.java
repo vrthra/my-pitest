@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import org.pitest.functional.F2;
 import org.pitest.functional.FCollection;
+import org.pitest.mutationtest.execute.MutationTestSlave;
 import org.pitest.testapi.Description;
 
 public class CoverageResult implements Serializable {
@@ -24,6 +25,7 @@ public class CoverageResult implements Serializable {
     this.coverage = coverage;
     this.greenSuite = greenSuite;
     System.out.println(">> Coverage: " + this.toString());
+    System.out.println("Pid: " + MutationTestSlave.getPid());
   }
 
   public Description getTestUnitDescription() {

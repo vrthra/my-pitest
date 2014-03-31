@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.pitest.functional.SideEffect1;
+import org.pitest.mutationtest.execute.MutationTestSlave;
 import org.pitest.util.Log;
 import org.pitest.util.SafeDataOutputStream;
 
@@ -38,6 +39,6 @@ final class SendData implements SideEffect1<SafeDataOutputStream> {
     }
     dos.flush();
     LOG.info("Sent tests to slave");
-
+    LOG.info("SendData Pid: " + MutationTestSlave.getPid());
   }
 }

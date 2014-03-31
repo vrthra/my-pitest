@@ -114,7 +114,8 @@ public abstract class Prelude {
     return new SideEffect1<T>() {
       public void apply(final T a) {
         synchronized (System.out) {
-        	System.out.println(t + " : " + a);
+        	System.out.println(a);
+        	//System.out.println(t + " : " + a);
         	System.out.flush();
         }
       }

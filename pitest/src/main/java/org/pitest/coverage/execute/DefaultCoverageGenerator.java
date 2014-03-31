@@ -35,6 +35,7 @@ import org.pitest.functional.SideEffect1;
 import org.pitest.functional.prelude.Prelude;
 import org.pitest.help.Help;
 import org.pitest.help.PitHelpError;
+import org.pitest.mutationtest.execute.MutationTestSlave;
 import org.pitest.process.LaunchOptions;
 import org.pitest.process.ProcessArgs;
 import org.pitest.testapi.Configuration;
@@ -85,6 +86,7 @@ public class DefaultCoverageGenerator implements CoverageGenerator {
       final long time = (System.currentTimeMillis() - t0) / 1000;
 
       LOG.info("Calculated coverage in " + time + " seconds.");
+      LOG.info("Pid: " + MutationTestSlave.getPid());
 
       verifyBuildSuitableForMutationTesting(coverage);
 

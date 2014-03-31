@@ -63,11 +63,11 @@ public class MutationTestWorker {
       final TimeOutDecoratedTestSource testSource) throws IOException {
 
     for (final MutationDetails mutation : range) {
-      LOG.fine("Running mutation " + mutation);
+      MutationTestSlave.mutationStart(mutation.toString());
       final long t0 = System.currentTimeMillis();
       processMutation(r, testSource, mutation);
-      LOG.fine("processed mutation in " + (System.currentTimeMillis() - t0)
-          + " ms.");
+      MutationTestSlave.mutationEnd(mutation.toString(), "" + (System.currentTimeMillis() - t0) + " ms." );
+      //MutationTestSlave.log("Processed mutation in " + (System.currentTimeMillis() - t0) + " ms.");
     }
 
   }
@@ -103,7 +103,7 @@ public class MutationTestWorker {
       final MutationDetails mutationId, final Mutant mutatedClass,
       final List<TestUnit> relevantTests) {
     for(TestUnit t : relevantTests) {
-      LOG.fine("Using test: " + t);
+    	LOG.fine("Using test: " + t.getDescription());
     }
     MutationStatusTestPair mutationDetected;
     if ((relevantTests == null) || relevantTests.isEmpty()) {

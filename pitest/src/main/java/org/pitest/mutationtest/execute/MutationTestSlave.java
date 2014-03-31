@@ -14,11 +14,18 @@
  */
 package org.pitest.mutationtest.execute;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
+import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryNotificationInfo;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,6 +43,7 @@ import org.pitest.execute.UnGroupedStrategy;
 import org.pitest.functional.F3;
 import org.pitest.functional.FCollection;
 import org.pitest.functional.prelude.Prelude;
+import org.pitest.mutationtest.engine.MutationDetails;
 import org.pitest.mutationtest.mocksupport.BendJavassistToMyWillTransformer;
 import org.pitest.testapi.Configuration;
 import org.pitest.testapi.TestUnit;
@@ -48,12 +56,35 @@ import org.pitest.util.Log;
 import org.pitest.util.MemoryWatchdog;
 import org.pitest.util.SafeDataInputStream;
 
+class Xx { 
+	HashMap<String, PrintWriter> hout;
+    public Xx() {
+    	 hout = new HashMap<String,PrintWriter>();
+    }
+    public void finalize() {
+    	for(PrintWriter pw : hout.values()) {
+    		pw.close();
+    	}
+    }
+    public PrintWriter get(String i) throws FileNotFoundException, UnsupportedEncodingException {
+  	  if (!hout.containsKey(i)) {
+		  hout.put(i, new PrintWriter(i + ".log", "UTF-8"));
+	  }
+    	return hout.get(i);
+    }
+    public void put(String i, PrintWriter p) {
+    	hout.put(i, p);
+    }
+}
+
 public class MutationTestSlave {
 
+  private static String mutation = "Empty";
   private static final Logger       LOG = Log.getLogger();
 
   private final SafeDataInputStream dis;
   private final Reporter            reporter;
+  private static Xx hout = new Xx();
 
   public MutationTestSlave(final SafeDataInputStream dis,
       final Reporter reporter) {
@@ -179,5 +210,38 @@ public class MutationTestSlave {
     MemoryWatchdog.addWatchDogToAllPools(90, listener);
 
   }
+  public static String getPid() {
+	  return ManagementFactory.getRuntimeMXBean().getName();
+  }
+  public static void log(String s) {
+	  LOG.info("X(" + getPid()+ ") " + s + " -> " + mutation);
+	  try {
+	  PrintWriter p = hout.get(getPid());
+	  p.println(s + " XXX: " + mutation);
+	  p.flush();
+	  } catch (Exception e) {
+		  e.printStackTrace();
+	  }
+  }
 
+public static void mutationStart(String m) {
+	  mutation = m;
+	  try {
+	  PrintWriter p = hout.get(getPid());
+	  p.println("MSTART: " + m);
+	  p.flush();
+	  } catch (Exception e) {
+		  e.printStackTrace();
+	  }
+}
+public static void mutationEnd(String m, String time) {
+	  try {
+	  PrintWriter p = hout.get(getPid());
+	  p.println("MEND(" + time + "): " + m);
+	  p.flush();
+	  } catch (Exception e) {
+		  e.printStackTrace();
+	  }
+	  mutation = "Empty";
+}
 }

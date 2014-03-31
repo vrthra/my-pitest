@@ -35,6 +35,7 @@ import org.pitest.execute.Pitest;
 import org.pitest.execute.UnGroupedStrategy;
 import org.pitest.functional.FCollection;
 import org.pitest.functional.predicate.Predicate;
+import org.pitest.mutationtest.execute.MutationTestSlave;
 import org.pitest.testapi.TestUnit;
 import org.pitest.util.ExitCode;
 import org.pitest.util.Functions;
@@ -79,6 +80,7 @@ public class CoverageSlave {
       final List<TestUnit> tus = getTestsFromParent(dis, paramsFromParent);
 
       LOG.info(tus.size() + " tests received");
+      LOG.info("CoverageSlave Pid: " + MutationTestSlave.getPid());
 
       final CoverageWorker worker = new CoverageWorker(invokeQueue, tus);
 
