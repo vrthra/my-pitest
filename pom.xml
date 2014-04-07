@@ -5,7 +5,7 @@
     <organization><name>org.pitest</name></organization>
     <artifactId>pitest-parent</artifactId>
     <packaging>pom</packaging>
-    <version>0.34-CURRENT</version>
+    <version>0.34-RUBYALL</version>
     <name>pitest-parent</name>
     <url>http://pitest.org</url>
     <description>Mutation testing system for java - parent project</description>

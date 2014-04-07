@@ -39,6 +39,7 @@ import org.pitest.mutationtest.engine.Mutater;
 import org.pitest.mutationtest.engine.MutationDetails;
 import org.pitest.mutationtest.engine.MutationIdentifier;
 import org.pitest.mutationtest.mocksupport.JavassistInterceptor;
+import org.pitest.testapi.Description;
 import org.pitest.testapi.TestUnit;
 import org.pitest.util.IsolationUtils;
 import org.pitest.util.Log;
@@ -64,10 +65,14 @@ public class MutationTestWorker {
 
     for (final MutationDetails mutation : range) {
       LOG.fine("Running mutation " + mutation);
+      Xx.log("MSTART: " + mutation);
+      LOG.info("MUTATION: " + mutation);
       final long t0 = System.currentTimeMillis();
       processMutation(r, testSource, mutation);
       LOG.fine("processed mutation in " + (System.currentTimeMillis() - t0)
           + " ms.");
+      LOG.info("MUTATION_PROCESSED_IN: " + (System.currentTimeMillis() - t0));
+      Xx.log("MEND: " + mutation);
     }
 
   }
@@ -177,7 +182,15 @@ public class MutationTestWorker {
 
       final Pitest pit = new Pitest(staticConfig);
       pit.run(c, createEarlyExitTestGroup(tests));
-
+      
+      if (listener.lastFailingTest().hasSome()) {
+          final List<Description> failedTests = listener.getAllFailingTests();
+          LOG.info("FAILEDTESTS: " + failedTests.size());
+          for (Description tc: failedTests){
+        	LOG.info("FAILED: " + tc.getQualifiedName());
+            Xx.log("FAILED: " + tc.getQualifiedName());
+          }
+      }
       return createStatusTestPair(listener);
     } catch (final Exception ex) {
       throw translateCheckedException(ex);
@@ -198,6 +211,7 @@ public class MutationTestWorker {
   }
 
   private List<TestUnit> createEarlyExitTestGroup(final List<TestUnit> tests) {
+	  LOG.info("TOTALTESTS: " + tests.size());
     return Collections.<TestUnit> singletonList(new MultipleTestGroup(tests));
   }
 

@@ -35,8 +35,10 @@ public class MultipleTestGroup extends AbstractTestUnit {
   public void execute(final ClassLoader loader, final ResultCollector rc) {
     for (final TestUnit each : this.children) {
       each.execute(loader, rc);
+ 
       if (rc.shouldExit()) {
-        break;
+    	  
+    	// break;
       }
     }
 

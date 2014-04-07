@@ -4,6 +4,7 @@ import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.StoppedByUserException;
+import org.pitest.mutationtest.execute.Xx;
 import org.pitest.testapi.ResultCollector;
 
 class AdaptingRunListener extends RunListener {
@@ -22,17 +23,20 @@ class AdaptingRunListener extends RunListener {
   public void testFailure(final Failure failure) throws Exception {
     this.rc.notifyEnd(this.description, failure.getException());
     this.failed = true;
+	Xx.log("TFAILED: " + this.description);
   }
 
   @Override
   public void testAssumptionFailure(final Failure failure) {
-    // do nothing so treated as success
+	// do nothing so treated as success
     // see http://junit.sourceforge.net/doc/ReleaseNotes4.4.html#assumptions
+    Xx.log("TASSUMPTION: " + this.description);
   }
 
   @Override
   public void testIgnored(final Description description) throws Exception {
     this.rc.notifySkipped(this.description);
+    Xx.log("TSKIPPED: " + this.description);
   }
 
   @Override
@@ -46,6 +50,7 @@ class AdaptingRunListener extends RunListener {
       throw new StoppedByUserException();
     }
     this.rc.notifyStart(this.description);
+    Xx.log("TSTART: " + this.description);
   }
 
   @Override
@@ -53,7 +58,7 @@ class AdaptingRunListener extends RunListener {
     if (!this.failed) {
       this.rc.notifyEnd(this.description);
     }
-
+    Xx.log("TEND: " + this.description);
   }
 
 }

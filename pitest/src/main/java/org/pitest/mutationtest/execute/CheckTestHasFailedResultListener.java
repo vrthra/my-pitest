@@ -14,6 +14,9 @@
  */
 package org.pitest.mutationtest.execute;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.pitest.functional.Option;
 import org.pitest.mutationtest.DetectionStatus;
 import org.pitest.testapi.Description;
@@ -24,6 +27,9 @@ public class CheckTestHasFailedResultListener implements TestListener {
 
   private Option<Description> lastFailingTest = Option.none();
   private int                 testsRun        = 0;
+ 
+  // AMIN
+  private ArrayList<Description> allFailingTests = null;
 
   public void onTestError(final TestResult tr) {
     recordFailingTest(tr);
@@ -31,8 +37,20 @@ public class CheckTestHasFailedResultListener implements TestListener {
 
   private void recordFailingTest(final TestResult tr) {
     this.lastFailingTest = Option.some(tr.getDescription());
+    
+    // AMIN
+    if (this.allFailingTests == null)
+      this.allFailingTests = new ArrayList<Description>();
+    this.allFailingTests.add(tr.getDescription());
+   
   }
 
+  
+  public List<Description> getAllFailingTests(){
+	  return this.allFailingTests;
+  }
+  
+  
   public void onTestFailure(final TestResult tr) {
     recordFailingTest(tr);
   }
