@@ -19,7 +19,7 @@ import org.pitest.testapi.TestUnit;
 
 public interface Container {
 
-  public final int BUFFER_SIZE = 6000;
+  public final int BUFFER_SIZE = 600000;
 
   public void submit(TestUnit c);
 

@@ -15,6 +15,7 @@
 package org.pitest.mutationtest.engine;
 
 import org.pitest.classinfo.ClassName;
+import org.json.simple.JSONObject;
 
 /**
  * The co-ordinates of a method within a class.
@@ -32,6 +33,14 @@ public class Location implements Comparable<Location> {
     this.method = method;
     this.methodDesc = methodDesc;
   }
+
+  public JSONObject toJSON(){
+	  JSONObject js = new JSONObject();
+	  js.put("class", this.clazz.toString());
+	  js.put("method", this.method.toString());
+	  js.put("mdesc", this.methodDesc);
+	  return js;
+	}
 
   public static Location location(final ClassName clazz,
       final MethodName method, final String methodDesc) {

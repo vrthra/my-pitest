@@ -16,6 +16,7 @@
 package org.pitest.testapi;
 
 import java.io.Serializable;
+import org.json.simple.JSONObject;
 
 public final class Description implements Serializable {
 
@@ -23,6 +24,14 @@ public final class Description implements Serializable {
 
   private final String      testClass;
   private final String      name;
+
+  public JSONObject toJSON(){
+   JSONObject js = new JSONObject();
+   js.put("testClass", this.testClass);
+   js.put("name", this.name);
+   return js;
+  }
+
 
   public Description(final String name) {
     this(name, (String) null);

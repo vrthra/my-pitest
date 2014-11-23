@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and limitations under the License. 
  */
 package org.pitest.mutationtest.engine;
+import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -49,6 +50,15 @@ public class MutationDetails {
     this.block = block;
     this.isInFinallyBlock = isInFinallyBlock;
     this.poison = poison;
+  }
+
+  public JSONObject toJSON(){
+	  JSONObject js = new JSONObject();
+	  js.put("id", this.id.toJSON());
+	  js.put("filename", this.filename);
+	  js.put("block", this.block);
+	  js.put("line", this.lineNumber);
+	  return js;
   }
 
   @Override

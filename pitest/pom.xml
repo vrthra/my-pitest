@@ -50,7 +50,7 @@
 					</excludes>
 					<excludedGroups>org.pitest.SystemTest</excludedGroups>
 				</configuration>
-				<dependencies>
+        <dependencies>
 					<dependency>
 						<groupId>org.testng</groupId>
 						<artifactId>testng</artifactId>
@@ -80,7 +80,7 @@
 					<execution>
 						<goals>
 							<goal>integration-test</goal>
-							<goal>verify</goal>
+							<!--goal>verify</goal-->
 						</goals>
 						<configuration>
 							<includes>
@@ -209,7 +209,13 @@
 		</resources>
 	</build>
 
-	<dependencies>
+  <dependencies>
+<dependency>
+	<groupId>com.googlecode.json-simple</groupId>
+<artifactId>json-simple</artifactId>
+	<version>1.1.1</version>
+</dependency>
+
 		<dependency>
 			<groupId>org.ow2.asm</groupId>
 			<artifactId>asm</artifactId>

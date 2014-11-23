@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import org.pitest.classinfo.ClassName;
@@ -40,8 +41,11 @@ import org.pitest.mutationtest.engine.MutationDetails;
 import org.pitest.mutationtest.engine.MutationIdentifier;
 import org.pitest.mutationtest.mocksupport.JavassistInterceptor;
 import org.pitest.testapi.TestUnit;
+import org.pitest.testapi.Description;
 import org.pitest.util.IsolationUtils;
 import org.pitest.util.Log;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 public class MutationTestWorker {
 
@@ -50,6 +54,7 @@ public class MutationTestWorker {
   private final Mutater                                     mutater;
   private final ClassLoader                                 loader;
   private final F3<ClassName, ClassLoader, byte[], Boolean> hotswap;
+  private ArrayList<MutationStatusTestPair>           failingTestCases = null;
 
   public MutationTestWorker(
       final F3<ClassName, ClassLoader, byte[], Boolean> hotswap,
@@ -86,17 +91,37 @@ public class MutationTestWorker {
 
     LOG.fine("mutating method " + mutatedClass.getDetails().getMethod());
 
+    JSONObject js = new JSONObject();
+    js.put("mutant", mutationDetails.toJSON());
+
     final List<TestUnit> relevantTests = testSource
         .translateTests(mutationDetails.getTestsInOrder());
+
+    JSONArray coveringTests = new JSONArray();
+    JSONArray killingTests = new JSONArray();
+
+    for (TestUnit t: relevantTests) {
+      coveringTests.add(t.getDescription().toString());
+    }
 
     r.describe(mutationId);
 
     final MutationStatusTestPair mutationDetected = handleMutation(mutationDetails,
         mutatedClass, relevantTests);
 
-    r.report(mutationId, mutationDetected);
+     if (this.failingTestCases == null) { // AMIN
+         r.report(mutationId, mutationDetected);
+     } else {
+       for (MutationStatusTestPair msp: this.failingTestCases) {
+         r.report(mutationId, msp);
+         killingTests.add(msp.getKillingTest().value());
+       }
 
-    LOG.fine("Mutation " + mutationId + " detected = " + mutationDetected);
+     }
+    js.put("coveredBy", coveringTests);
+    js.put("killing", killingTests);
+    Log.write(js.toJSONString() + '\n');
+
   }
 
   private MutationStatusTestPair handleMutation(
@@ -178,11 +203,26 @@ public class MutationTestWorker {
       final Pitest pit = new Pitest(staticConfig);
       pit.run(c, createEarlyExitTestGroup(tests));
 
+      this.createListOfTestPairs(listener, tests);
+
       return createStatusTestPair(listener);
     } catch (final Exception ex) {
       throw translateCheckedException(ex);
     }
 
+  }
+
+
+  // AMIN HACK
+  private void createListOfTestPairs( final CheckTestHasFailedResultListener listener, List<TestUnit> tests) {
+
+    ArrayList<MutationStatusTestPair> result = new ArrayList<MutationStatusTestPair>();
+    for (Description l : listener.getAllFailinTestCases()){
+      result.add(new MutationStatusTestPair(listener.getNumberOfTestsRun(),
+            listener.status(), l.toString()));
+    }
+    if (result.size() > 0)
+      this.failingTestCases = result;
   }
 
   private MutationStatusTestPair createStatusTestPair(

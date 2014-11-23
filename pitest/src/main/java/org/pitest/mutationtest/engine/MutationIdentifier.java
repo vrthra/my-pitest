@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import org.json.simple.JSONObject;
 
 import org.pitest.classinfo.ClassName;
 
@@ -31,6 +32,13 @@ public class MutationIdentifier implements Comparable<MutationIdentifier> {
       final String mutatorUniqueId) {
     this(location, Collections.singleton(index), mutatorUniqueId);
   }
+
+  // AMIN DIRTY HACK
+  public MutationIdentifier clone(int i){
+     MutationIdentifier s = new MutationIdentifier(this.location, this.indexes, this.mutator);
+     return s;
+  }
+
 
   public MutationIdentifier(final Location location,
       final Collection<Integer> indexes, final String mutatorUniqueId) {
@@ -67,6 +75,14 @@ public class MutationIdentifier implements Comparable<MutationIdentifier> {
   public String toString() {
     return "MutationIdentifier [location=" + this.location + ", indexes="
         + this.indexes + ", mutator=" + this.mutator + "]";
+  }
+
+  public JSONObject toJSON() {
+    JSONObject js = new JSONObject();
+    js.put("location", this.location.toJSON());
+    js.put("indexes", this.indexes.toString());
+    js.put("mutator", this.mutator);
+    return js;
   }
 
   public boolean matches(final MutationIdentifier newId) {

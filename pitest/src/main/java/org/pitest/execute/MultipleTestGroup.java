@@ -21,10 +21,15 @@ import org.pitest.testapi.AbstractTestUnit;
 import org.pitest.testapi.Description;
 import org.pitest.testapi.ResultCollector;
 import org.pitest.testapi.TestUnit;
+import org.pitest.util.Log;
+import java.util.logging.Logger;
+
 
 public class MultipleTestGroup extends AbstractTestUnit {
 
   private final List<TestUnit> children;
+  private static final Logger                               LOG = Log.getLogger();
+
 
   public MultipleTestGroup(final List<TestUnit> children) {
     super(new Description("MultipleTestGroup"));
@@ -36,7 +41,8 @@ public class MultipleTestGroup extends AbstractTestUnit {
     for (final TestUnit each : this.children) {
       each.execute(loader, rc);
       if (rc.shouldExit()) {
-        break;
+        // AMIN dont allow fail to stop.
+        //break;
       }
     }
 

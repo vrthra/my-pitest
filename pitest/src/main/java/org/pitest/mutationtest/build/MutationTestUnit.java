@@ -19,6 +19,7 @@ import static org.pitest.util.Unchecked.translateCheckedException;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.logging.Logger;
+import java.util.ArrayList;
 
 import org.pitest.classinfo.ClassName;
 import org.pitest.mutationtest.DetectionStatus;
@@ -103,17 +104,21 @@ public class MutationTestUnit extends AbstractTestUnit implements
 
     final Collection<MutationDetails> remainingMutations = mutations
         .getUnrunMutations();
-    final MutationTestProcess worker = this.workerFactory.createWorker(
-        remainingMutations, this.testClasses);
-    worker.start();
 
-    setFirstMutationToStatusOfStartedInCaseSlaveFailsAtBoot(mutations,
-        remainingMutations);
+    final ArrayList<MutationDetails> subList = new ArrayList<MutationDetails>(); // ADDED by AMIN
+    for(MutationDetails md :remainingMutations){
+      subList.clear();
+      subList.add(md);
+      final MutationTestProcess worker = this.workerFactory.createWorker(
+          subList, this.testClasses);
+          worker.start();
+          setFirstMutationToStatusOfStartedInCaseSlaveFailsAtBoot(mutations,
+              subList);
+          final ExitCode exitCode = waitForSlaveToDie(worker);
+          worker.results(mutations);
 
-    final ExitCode exitCode = waitForSlaveToDie(worker);
-    worker.results(mutations);
-
-    correctResultForProcessExitCode(mutations, exitCode);
+          correctResultForProcessExitCode(mutations, exitCode);
+    }
 
   }
 
